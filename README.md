@@ -3,3 +3,6 @@ This is a MLOPs based Project to track and predict VISA applications. TechStack 
 
 
 Use of Anaconda, Jupyter Notebooks and Python, Rest APIs, MongoDB and Deployment
+
+
+conda create -n visa python=3.12.7-y    # for env
