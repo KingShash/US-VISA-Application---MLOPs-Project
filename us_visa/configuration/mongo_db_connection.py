@@ -30,7 +30,7 @@ class MongoDBClient:
                 if mongo_db_url is None:
                     raise Exception(f"Environment key: {MONGODB_URL_KEY} is not set.")
                 MongoDBClient.client = pymongo.MongoClient(mongo_db_url, tlsCAFile=ca)
-            self.client = MongoDBClient.client
+            self.client: pymongo.MongoClient = MongoDBClient.client  # type: ignore[assignment]
             self.database = self.client[database_name]
             self.database_name = database_name
             logging.info("MongoDB connection succesfully established.")
