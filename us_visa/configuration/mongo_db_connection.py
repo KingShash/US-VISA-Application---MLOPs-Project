@@ -2,7 +2,8 @@ import sys
 from dotenv import load_dotenv, find_dotenv
 import os
 
-load_dotenv(find_dotenv())  # Searches parent directories automatically
+load_dotenv(find_dotenv(), override=True)
+     # Searches parent directories automatically
 from us_visa.exception import USvisaException
 from us_visa.logger import logging
 
