@@ -51,11 +51,11 @@ def load_object(file_path: str) -> object:
     
 
 
-def save_numpy_array_data(file_path: str, array: np.array):
+def save_numpy_array_data(file_path: str, array: np.ndarray):
     """
     Save numpy array data to file
     file_path: str location of file to save
-    array: np.array data to save
+    array: np.ndarray data to save
     """
     try:
         dir_path = os.path.dirname(file_path)
@@ -68,11 +68,11 @@ def save_numpy_array_data(file_path: str, array: np.array):
 
 
 
-def load_numpy_array_data(file_path: str) -> np.array:
+def load_numpy_array_data(file_path: str) -> np.ndarray:
     """
     load numpy array data from file
     file_path: str location of file to load
-    return: np.array data loaded
+    return: np.ndarray data loaded
     """
     try:
         with open(file_path, 'rb') as file_obj:

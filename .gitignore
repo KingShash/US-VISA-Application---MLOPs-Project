@@ -205,3 +205,18 @@ cython_debug/
 marimo/_static/
 marimo/_lsp/
 __marimo__/
+
+
+# ML artifacts
+artifacts/
+
+# model files
+*.pkl
+*.joblib
+*.h5
+
+# logs
+*.log
+
+# cache
+__pycache__/

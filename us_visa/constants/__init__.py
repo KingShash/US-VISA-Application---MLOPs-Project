@@ -78,3 +78,8 @@ MODEL EVALUATION related constant
 MODEL_EVALUATION_CHANGED_THRESHOLD_SCORE: float = 0.2
 MODEL_BUCKET_NAME = "usvisa-model2026-shashking"
 MODEL_PUSHER_S3_KEY = "model-registry"
+
+
+
+APP_HOST = "0.0.0.0"
+APP_PORT = 8080

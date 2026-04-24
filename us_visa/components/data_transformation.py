@@ -1,4 +1,5 @@
 import sys
+from typing import Tuple, cast
 
 import numpy as np
 import pandas as pd
@@ -13,8 +14,7 @@ from us_visa.entity.artifact_entity import DataTransformationArtifact, DataInges
 from us_visa.exception import USvisaException
 from us_visa.logger import logging
 from us_visa.utils.main_utils import save_object, save_numpy_array_data, read_yaml_file, drop_columns
-from us_visa.entity.estimator import TargetValueMapping     #performs mapping of target category  to numerical value in 0 or 1
-
+from us_visa.entity.estimator import TargetValueMapping
 
 
 class DataTransformation:
@@ -31,33 +31,30 @@ class DataTransformation:
             self.data_validation_artifact = data_validation_artifact
             self._schema_config = read_yaml_file(file_path=SCHEMA_FILE_PATH)
         except Exception as e:
-            raise USvisaException(e, sys)
+            raise USvisaException(e, sys) from e
 
     @staticmethod
-    def read_data(file_path) -> pd.DataFrame:
+    def read_data(file_path: str) -> pd.DataFrame:
         try:
             return pd.read_csv(file_path)
         except Exception as e:
-            raise USvisaException(e, sys)
+            raise USvisaException(e, sys) from e
 
-    
-    def get_data_transformer_object(self) -> Pipeline:
+    def get_data_transformer_object(self) -> ColumnTransformer:
         """
         Method Name :   get_data_transformer_object
         Description :   This method creates and returns a data transformer object for the data
-        
-        Output      :   data transformer object is created and returned 
+
+        Output      :   data transformer object is created and returned
         On Failure  :   Write an exception log and then raise an exception
         """
-        logging.info(
-            "Entered get_data_transformer_object method of DataTransformation class"
-        )
+        logging.info("Entered get_data_transformer_object method of DataTransformation class")
 
         try:
             logging.info("Got numerical cols from schema config")
 
             numeric_transformer = StandardScaler()
-            oh_transformer = OneHotEncoder()
+            oh_transformer = OneHotEncoder(handle_unknown="ignore", sparse_output=False)
             ordinal_encoder = OrdinalEncoder()
 
             logging.info("Initialized StandardScaler, OneHotEncoder, OrdinalEncoder")
@@ -78,25 +75,23 @@ class DataTransformation:
                     ("Ordinal_Encoder", ordinal_encoder, or_columns),
                     ("Transformer", transform_pipe, transform_columns),
                     ("StandardScaler", numeric_transformer, num_features)
-                ]
+                ],
+                sparse_threshold=0
             )
 
             logging.info("Created preprocessor object from ColumnTransformer")
-
-            logging.info(
-                "Exited get_data_transformer_object method of DataTransformation class"
-            )
+            logging.info("Exited get_data_transformer_object method of DataTransformation class")
             return preprocessor
 
         except Exception as e:
             raise USvisaException(e, sys) from e
 
-    def initiate_data_transformation(self, ) -> DataTransformationArtifact:
+    def initiate_data_transformation(self) -> DataTransformationArtifact:
         """
         Method Name :   initiate_data_transformation
-        Description :   This method initiates the data transformation component for the pipeline 
-        
-        Output      :   data transformer steps are performed and preprocessor object is created  
+        Description :   This method initiates the data transformation component for the pipeline
+
+        Output      :   data transformer steps are performed and preprocessor object is created
         On Failure  :   Write an exception log and then raise an exception
         """
         try:
@@ -113,91 +108,66 @@ class DataTransformation:
 
                 logging.info("Got train features and test features of Training dataset")
 
-                input_feature_train_df['company_age'] = CURRENT_YEAR-input_feature_train_df['yr_of_estab']
-
+                input_feature_train_df['company_age'] = CURRENT_YEAR - input_feature_train_df['yr_of_estab']
                 logging.info("Added company_age column to the Training dataset")
 
                 drop_cols = self._schema_config['drop_columns']
-
                 logging.info("drop the columns in drop_cols of Training dataset")
 
-                input_feature_train_df = drop_columns(df=input_feature_train_df, cols = drop_cols)
-                
-                target_feature_train_df = target_feature_train_df.replace(
-                    TargetValueMapping()._asdict()
+                input_feature_train_df = drop_columns(df=input_feature_train_df, cols=drop_cols)
+
+                target_feature_train_arr = np.array(
+                    target_feature_train_df.replace(TargetValueMapping()._asdict())
                 ).astype(int)
 
-
                 input_feature_test_df = test_df.drop(columns=[TARGET_COLUMN])
-
                 target_feature_test_df = test_df[TARGET_COLUMN]
 
-
-                input_feature_test_df['company_age'] = CURRENT_YEAR-input_feature_test_df['yr_of_estab']
-
+                input_feature_test_df['company_age'] = CURRENT_YEAR - input_feature_test_df['yr_of_estab']
                 logging.info("Added company_age column to the Test dataset")
 
-                input_feature_test_df = drop_columns(df=input_feature_test_df, cols = drop_cols)
-
+                input_feature_test_df = drop_columns(df=input_feature_test_df, cols=drop_cols)
                 logging.info("drop the columns in drop_cols of Test dataset")
 
-                target_feature_test_df = target_feature_test_df.replace(
-                TargetValueMapping()._asdict()
+                target_feature_test_arr = np.array(
+                    target_feature_test_df.replace(TargetValueMapping()._asdict())
                 ).astype(int)
 
                 logging.info("Got train features and test features of Testing dataset")
+                logging.info("Applying preprocessing object on training dataframe and testing dataframe")
 
-                logging.info(
-                    "Applying preprocessing object on training dataframe and testing dataframe"
-                )
+                input_feature_train_arr = cast(np.ndarray, preprocessor.fit_transform(input_feature_train_df))
+                logging.info("Used the preprocessor object to fit transform the train features")
 
-                input_feature_train_arr = preprocessor.fit_transform(input_feature_train_df)
-
-                logging.info(
-                    "Used the preprocessor object to fit transform the train features"
-                )
-
-                input_feature_test_arr = preprocessor.transform(input_feature_test_df)
-
+                input_feature_test_arr = cast(np.ndarray, preprocessor.transform(input_feature_test_df))
                 logging.info("Used the preprocessor object to transform the test features")
 
                 logging.info("Applying SMOTEENN on Training dataset")
-
                 smt = SMOTEENN(sampling_strategy="minority")
 
-                input_feature_train_final, target_feature_train_final = smt.fit_resample(
-                    input_feature_train_arr, target_feature_train_df
+                input_feature_train_final, target_feature_train_final = cast(
+                    Tuple[np.ndarray, np.ndarray],
+                    smt.fit_resample(input_feature_train_arr, target_feature_train_arr)
                 )
-
                 logging.info("Applied SMOTEENN on training dataset")
 
                 logging.info("Applying SMOTEENN on testing dataset")
-
-                input_feature_test_final, target_feature_test_final = smt.fit_resample(
-                    input_feature_test_arr, target_feature_test_df
+                input_feature_test_final, target_feature_test_final = cast(
+                    Tuple[np.ndarray, np.ndarray],
+                    smt.fit_resample(input_feature_test_arr, target_feature_test_arr)
                 )
-
                 logging.info("Applied SMOTEENN on testing dataset")
 
                 logging.info("Created train array and test array")
-
-                train_arr = np.c_[
-                    input_feature_train_final, np.array(target_feature_train_final)
-                ]
-
-                test_arr = np.c_[
-                    input_feature_test_final, np.array(target_feature_test_final)
-                ]
+                train_arr = np.c_[input_feature_train_final, np.array(target_feature_train_final)]
+                test_arr = np.c_[input_feature_test_final, np.array(target_feature_test_final)]
 
                 save_object(self.data_transformation_config.transformed_object_file_path, preprocessor)
                 save_numpy_array_data(self.data_transformation_config.transformed_train_file_path, array=train_arr)
                 save_numpy_array_data(self.data_transformation_config.transformed_test_file_path, array=test_arr)
 
                 logging.info("Saved the preprocessor object")
-
-                logging.info(
-                    "Exited initiate_data_transformation method of Data_Transformation class"
-                )
+                logging.info("Exited initiate_data_transformation method of Data_Transformation class")
 
                 data_transformation_artifact = DataTransformationArtifact(
                     transformed_object_file_path=self.data_transformation_config.transformed_object_file_path,

@@ -1,0 +1,359 @@
+metrics:
+- metric: DatasetDriftMetric
+  result:
+    dataset_drift: false
+    drift_share: 0.5
+    number_of_columns: 10
+    number_of_drifted_columns: 0
+    share_of_drifted_columns: 0.0
+- metric: DataDriftTable
+  result:
+    dataset_drift: false
+    drift_by_columns:
+      case_status:
+        column_name: case_status
+        column_type: cat
+        current:
+          small_distribution:
+            x:
+            - Certified
+            - Denied
+            y:
+            - 3425
+            - 1671
+        drift_detected: false
+        drift_score: 0.003945303946713911
+        reference:
+          small_distribution:
+            x:
+            - Certified
+            - Denied
+            y:
+            - 13593
+            - 6791
+        stattest_name: Jensen-Shannon distance
+        stattest_threshold: 0.1
+      continent:
+        column_name: continent
+        column_type: cat
+        current:
+          small_distribution:
+            x:
+            - Africa
+            - Asia
+            - Europe
+            - North America
+            - Oceania
+            - South America
+            y:
+            - 120
+            - 3367
+            - 728
+            - 678
+            - 33
+            - 170
+        drift_detected: false
+        drift_score: 0.01015462138591841
+        reference:
+          small_distribution:
+            x:
+            - Africa
+            - Asia
+            - Europe
+            - North America
+            - Oceania
+            - South America
+            y:
+            - 431
+            - 13494
+            - 3004
+            - 2614
+            - 159
+            - 682
+        stattest_name: Jensen-Shannon distance
+        stattest_threshold: 0.1
+      education_of_employee:
+        column_name: education_of_employee
+        column_type: cat
+        current:
+          small_distribution:
+            x:
+            - Bachelor's
+            - Doctorate
+            - High School
+            - Master's
+            y:
+            - 2016
+            - 441
+            - 683
+            - 1956
+        drift_detected: false
+        drift_score: 0.005947671338656408
+        reference:
+          small_distribution:
+            x:
+            - Bachelor's
+            - Doctorate
+            - High School
+            - Master's
+            y:
+            - 8218
+            - 1751
+            - 2737
+            - 7678
+        stattest_name: Jensen-Shannon distance
+        stattest_threshold: 0.1
+      full_time_position:
+        column_name: full_time_position
+        column_type: cat
+        current:
+          small_distribution:
+            x:
+            - N
+            - Y
+            y:
+            - 545
+            - 4551
+        drift_detected: false
+        drift_score: 0.0010120626853102111
+        reference:
+          small_distribution:
+            x:
+            - N
+            - Y
+            y:
+            - 2162
+            - 18222
+        stattest_name: Jensen-Shannon distance
+        stattest_threshold: 0.1
+      has_job_experience:
+        column_name: has_job_experience
+        column_type: cat
+        current:
+          small_distribution:
+            x:
+            - N
+            - Y
+            y:
+            - 2131
+            - 2965
+        drift_detected: false
+        drift_score: 0.0008086055636902439
+        reference:
+          small_distribution:
+            x:
+            - N
+            - Y
+            y:
+            - 8547
+            - 11837
+        stattest_name: Jensen-Shannon distance
+        stattest_threshold: 0.1
+      no_of_employees:
+        column_name: no_of_employees
+        column_type: num
+        current:
+          small_distribution:
+            x:
+            - -26.0
+            - 60183.5
+            - 120393.0
+            - 180602.5
+            - 240812.0
+            - 301021.5
+            - 361231.0
+            - 421440.5
+            - 481650.0
+            - 541859.5
+            - 602069.0
+            y:
+            - 1.6334905347436593e-05
+            - 1.9229038617293674e-07
+            - 3.9109909052122727e-08
+            - 1.3036636350707576e-08
+            - 1.3036636350707576e-08
+            - 3.259159087676894e-09
+            - 6.518318175353788e-09
+            - 0.0
+            - 0.0
+            - 6.518318175353788e-09
+        drift_detected: false
+        drift_score: 0.024699200866822844
+        reference:
+          small_distribution:
+            x:
+            - -26.0
+            - 59423.8
+            - 118873.6
+            - 178323.40000000002
+            - 237773.2
+            - 297223.0
+            - 356672.80000000005
+            - 416122.60000000003
+            - 475572.4
+            - 535022.2000000001
+            - 594472.0
+            y:
+            - 1.6466077657921148e-05
+            - 2.3105651720045712e-07
+            - 7.17925607015706e-08
+            - 1.237802770716735e-08
+            - 1.3203229554311836e-08
+            - 8.252018471444892e-09
+            - 9.077220318589389e-09
+            - 4.95121108286694e-09
+            - 1.6504036942889783e-09
+            - 2.475605541433472e-09
+        stattest_name: Wasserstein distance (normed)
+        stattest_threshold: 0.1
+      prevailing_wage:
+        column_name: prevailing_wage
+        column_type: num
+        current:
+          small_distribution:
+            x:
+            - 3.0031
+            - 30457.06979
+            - 60911.13648
+            - 91365.20317
+            - 121819.26986
+            - 152273.33655
+            - 182727.40323999999
+            - 213181.46993
+            - 243635.53662
+            - 274089.60331
+            - 304543.67
+            y:
+            - 7.313430653900036e-06
+            - 6.598196466602323e-06
+            - 7.004140194528054e-06
+            - 5.998946201569103e-06
+            - 3.6663806538053913e-06
+            - 1.1276214664603588e-06
+            - 5.219276501902228e-07
+            - 3.4150821555656547e-07
+            - 1.8686298587057374e-07
+            - 7.732261484299596e-08
+        drift_detected: false
+        drift_score: 0.0190073781808651
+        reference:
+          small_distribution:
+            x:
+            - 2.1367
+            - 31922.950030000004
+            - 63843.76336000001
+            - 95764.57669000002
+            - 127685.39002000002
+            - 159606.20335000003
+            - 191527.01668000003
+            - 223447.83001000003
+            - 255368.64334000004
+            - 287289.45667000004
+            - 319210.27
+            y:
+            - 7.455347918942554e-06
+            - 6.7883470950256136e-06
+            - 6.9743081542282635e-06
+            - 5.603421668205431e-06
+            - 2.8140057801657007e-06
+            - 7.761184702259305e-07
+            - 4.472286630410807e-07
+            - 3.027630468010066e-07
+            - 1.3831814320858168e-07
+            - 2.7663628641716362e-08
+        stattest_name: Wasserstein distance (normed)
+        stattest_threshold: 0.1
+      region_of_employment:
+        column_name: region_of_employment
+        column_type: cat
+        current:
+          small_distribution:
+            x:
+            - Island
+            - Midwest
+            - Northeast
+            - South
+            - West
+            y:
+            - 68
+            - 905
+            - 1406
+            - 1392
+            - 1325
+        drift_detected: false
+        drift_score: 0.011981894446189386
+        reference:
+          small_distribution:
+            x:
+            - Island
+            - Midwest
+            - Northeast
+            - South
+            - West
+            y:
+            - 307
+            - 3402
+            - 5789
+            - 5625
+            - 5261
+        stattest_name: Jensen-Shannon distance
+        stattest_threshold: 0.1
+      requires_job_training:
+        column_name: requires_job_training
+        column_type: cat
+        current:
+          small_distribution:
+            x:
+            - N
+            - Y
+            y:
+            - 4532
+            - 564
+        drift_detected: false
+        drift_score: 0.007368510034544893
+        reference:
+          small_distribution:
+            x:
+            - N
+            - Y
+            y:
+            - 17993
+            - 2391
+        stattest_name: Jensen-Shannon distance
+        stattest_threshold: 0.1
+      unit_of_wage:
+        column_name: unit_of_wage
+        column_type: cat
+        current:
+          small_distribution:
+            x:
+            - Hour
+            - Month
+            - Week
+            - Year
+            y:
+            - 416
+            - 28
+            - 58
+            - 4594
+        drift_detected: false
+        drift_score: 0.014746267448887337
+        reference:
+          small_distribution:
+            x:
+            - Hour
+            - Month
+            - Week
+            - Year
+            y:
+            - 1741
+            - 61
+            - 214
+            - 18368
+        stattest_name: Jensen-Shannon distance
+        stattest_threshold: 0.1
+    number_of_columns: 10
+    number_of_drifted_columns: 0
+    share_of_drifted_columns: 0.0
+timestamp: '2026-04-23 11:58:07.701709'
+version: 0.2.8
