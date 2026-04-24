@@ -5,8 +5,7 @@ matplotlib
 plotly
 seaborn
 scipy
-scikit-learn
-imblearn
+
 xgboost
 catboost
 pymongo
@@ -22,4 +21,8 @@ fastapi
 uvicorn
 jinja2
 python-multipart
+
+scikit-learn==1.5.1
+imbalanced-learn==0.14.1
+
 -e .
