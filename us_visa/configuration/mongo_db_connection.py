@@ -10,6 +10,7 @@ from us_visa.logger import logging
 from us_visa.constants import DATABASE_NAME, MONGODB_URL_KEY
 import pymongo
 import certifi
+from typing import ClassVar, Optional
 
 ca = certifi.where()
 
@@ -21,7 +22,7 @@ class MongoDBClient:
     Output      :   connection to mongodb database
     On Failure  :   raises an exception
     """
-    client = None
+    client: ClassVar[Optional[pymongo.MongoClient]] = None  # type: ignore[assignment]
 
     def __init__(self, database_name=DATABASE_NAME) -> None:
         try:
