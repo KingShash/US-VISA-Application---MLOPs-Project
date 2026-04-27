@@ -72,8 +72,8 @@ class DataForm:
 
 @app.get("/", tags=["authentication"])
 async def index(request: Request):
-    return templates.TemplateResponse(request=request, name="usvisa.html")
-    
+    # In app.py line 75, change to:
+    return templates.TemplateResponse(request=request, name="usvisa.html")  
 
 @app.get("/train")
 async def trainRouteClient():
